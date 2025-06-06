@@ -1,70 +1,70 @@
 import requests
 import xml.etree.ElementTree as ET
 
-URL = "https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-JawaTengah.xml"
+# URL data prakiraan cuaca BMKG untuk wilayah Jawa Tengah (misal)
+url = "https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-KabupatenBlora.xml"
 
-def parse_cuaca_kedungtuban():
+def ambil_cuaca():
     try:
-        response = requests.get(URL)
-        response.raise_for_status()
-        xml_data = response.content
+        response = requests.get(url)
+        response.raise_for_status()  # pastikan respon OK
 
-        root = ET.fromstring(xml_data)
+        root = ET.fromstring(response.content)
 
-        # Cari area Kedungtuban
-        area = None
-        for a in root.findall(".//area"):
-            if a.attrib.get('description', '').lower() == 'kedungtuban':
-                area = a
+        # Cari lokasi Kedungtuban (kode/stasiun sesuai di XML)
+        # Di XML BMKG, nama lokasi biasanya di tag <area> dengan atribut 'description'
+        lokasi_target = "Kedungtuban"
+
+        cuaca_hari_ini = ""
+        cuaca_besok = ""
+
+        # Cari area yang sesuai lokasi
+        for area in root.findall(".//area"):
+            desc = area.get("description", "")
+            if lokasi_target.lower() in desc.lower():
+                # Ambil parameter cuaca untuk hari ini dan besok
+                # Biasanya di tag <parameter> dengan atribut id="weather"
+                # Dan waktu di tag <timerange>
+
+                # Kita ambil dua timerange pertama (hari ini dan besok)
+                weather_params = area.findall(".//parameter[@id='weather']/timerange")
+                if len(weather_params) >= 2:
+                    cuaca_hari_ini = weather_params[0].find("value").text
+                    cuaca_besok = weather_params[1].find("value").text
+
                 break
-        if area is None:
-            return "Area Kedungtuban tidak ditemukan"
 
-        # Ambil parameter cuaca (weather) hari ini dan besok
-        weather_params = area.findall("parameter[@id='weather']")
-        cuaca_list = []
-        for param in weather_params:
-            values = param.findall("timerange[@h='00']/value")
-            if not values:
-                values = param.findall("value")
-            for i, val in enumerate(values[:2]):
-                kode_cuaca = val.text
-                deskripsi = cuaca_kode_to_deskripsi(kode_cuaca)
-                cuaca_list.append(deskripsi)
+        # Map kode cuaca ke deskripsi (sederhana)
+        kode_cuaca = {
+            "0": "Cerah",
+            "1": "Cerah Berawan",
+            "2": "Cerah Berawan",
+            "3": "Berawan",
+            "4": "Berawan Tebal",
+            "5": "Udara Kabur",
+            "10": "Asap",
+            "45": "Kabut",
+            "60": "Hujan Ringan",
+            "61": "Hujan Sedang",
+            "63": "Hujan Lebat",
+            "80": "Hujan Lokal",
+            "95": "Hujan Petir",
+        }
 
-        if len(cuaca_list) < 2:
-            return "Data cuaca tidak lengkap"
+        hari_ini_text = kode_cuaca.get(cuaca_hari_ini, "Cuaca Tidak Diketahui")
+        besok_text = kode_cuaca.get(cuaca_besok, "Cuaca Tidak Diketahui")
 
-        hasil = f"Hari ini: {cuaca_list[0]}\nBesok: {cuaca_list[1]}"
-        return hasil
+        hasil = f"Kedungtuban, Blora\nHari ini: {hari_ini_text}\nBesok: {besok_text}"
+
+        # Simpan ke file cuaca.txt
+        with open("cuaca.txt", "w", encoding="utf-8") as f:
+            f.write(hasil)
+
+        print("Berhasil update cuaca:")
+        print(hasil)
 
     except Exception as e:
-        return f"Error: {e}"
-
-def cuaca_kode_to_deskripsi(kode):
-    mapping = {
-        '0': 'Cerah',
-        '1': 'Cerah Berawan',
-        '2': 'Cerah Berawan',
-        '3': 'Berawan',
-        '4': 'Mendung',
-        '5': 'Mendung Tebal',
-        '10': 'Asap',
-        '45': 'Kabut',
-        '60': 'Hujan Ringan',
-        '61': 'Hujan Sedang',
-        '63': 'Hujan Lebat',
-        '70': 'Salju',
-        '80': 'Hujan Lokal',
-        '95': 'Hujan Petir',
-    }
-    return mapping.get(kode, 'Cuaca Tidak Diketahui')
-
-def simpan_ke_file(nama_file="cuaca.txt"):
-    hasil_cuaca = parse_cuaca_kedungtuban()
-    with open(nama_file, "w", encoding="utf-8") as f:
-        f.write(hasil_cuaca)
-    print(f"File '{nama_file}' berhasil diperbarui.")
+        print("Gagal ambil atau proses data cuaca:", e)
 
 if __name__ == "__main__":
-    simpan_ke_file()
+    ambil_cuaca()
