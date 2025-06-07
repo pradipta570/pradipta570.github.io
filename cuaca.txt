@@ -1,1 +1,1 @@
-Gagal ambil cuaca: 404 Client Error: Not Found for url: https://data.bmkg.go.id/DataMKG/MEWS/DigitalForecast/DigitalForecast-JawaTengah.json
+Gagal ambil cuaca: Expecting value: line 1 column 1 (char 0)
