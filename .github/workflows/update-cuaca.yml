@@ -1,34 +1,39 @@
-name: Update Cuaca BMKG
+name: Update Cuaca BMKG (JSON)
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 */6 * * *"  # setiap 6 jam
   workflow_dispatch:
 
 jobs:
-  update_cuaca:
+  update-cuaca:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - name: Clone repo ini
+        uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.x'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install requests
-      run: pip install requests
+      - name: Install requests
+        run: pip install requests
 
-    - name: Run update_cuaca.py
-      run: |
-        python update_cuaca.py
+      - name: Jalankan skrip Python
+        run: python update_cuaca_json.py
 
-    - name: Commit and push changes
-      run: |
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add cuaca.txt
-        git diff --cached --quiet || git commit -m "Update cuaca.txt otomatis"
-        git push
+      - name: Clone repo GitHub Pages
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git clone https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/pradipta570/pradipta570.github.io.git pages
+
+      - name: Salin cuaca.txt ke repo GitHub Pages
+        run: |
+          cp cuaca.txt pages/
+          cd pages
+          git add cuaca.txt
+          git commit -m "Update cuaca.txt otomatis"
+          git push
