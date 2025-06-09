@@ -1,12 +1,1 @@
-{
-    "hari_ini": {
-        "tanggal": "08/06",
-        "kondisi": "Umumnya berawan dengan hujan singkat",
-        "suhu_max": 35
-    },
-    "besok": {
-        "tanggal": "09/06",
-        "kondisi": "Badai Petir",
-        "suhu_max": 31
-    }
-}
+{"hari_ini": {"cuaca": "Sebagian cerah dengan hujan singkat", "suhu": 32}, "besok": {"cuaca": "Berawan terputus-putus", "suhu": 32}}
