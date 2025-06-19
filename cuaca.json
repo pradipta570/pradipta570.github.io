@@ -1,10 +1,10 @@
 {
   "hari_ini": {
     "cuaca": "Berawan",
-    "suhu": 33
+    "suhu": 30
   },
   "besok": {
-    "cuaca": "Umumnya berawan",
-    "suhu": 30
+    "cuaca": "Badai Petir",
+    "suhu": 28
   }
 }
