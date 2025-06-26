@@ -1,10 +1,10 @@
 {
   "hari_ini": {
-    "cuaca": "Sedikit awan",
-    "suhu": 25
+    "cuaca": "Cerah berkabut",
+    "suhu": 29
   },
   "besok": {
-    "cuaca": "Berawan terputus-putus",
+    "cuaca": "Umumnya berawan dengan badai petir",
     "suhu": 33
   }
 }
