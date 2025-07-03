@@ -3,11 +3,11 @@
   "hari_ini": {
     "cuaca": "Hujan Ringan",
     "suhu": 24,
-    "kelembapan": 91
+    "kelembapan": 90
   },
   "besok": {
     "cuaca": "Berawan",
     "suhu": 23,
-    "kelembapan": 92
+    "kelembapan": 91
   }
 }
