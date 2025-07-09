@@ -2,12 +2,12 @@
   "lokasi": "Kedungtuban",
   "hari_ini": {
     "cuaca": "Cerah",
-    "suhu": 21,
-    "kelembapan": 88
+    "suhu": 27,
+    "kelembapan": 63
   },
   "besok": {
-    "cuaca": "Cerah Berawan",
+    "cuaca": "Cerah",
     "suhu": 22,
-    "kelembapan": 82
+    "kelembapan": 77
   }
 }
